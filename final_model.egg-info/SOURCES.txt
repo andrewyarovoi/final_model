@@ -1,0 +1,16 @@
+README.md
+setup.py
+dataset/__init__.py
+dataset/convert_off_to_numpy.py
+dataset/create_static_dataset.py
+dataset/dynamic_dataset.py
+final_model.egg-info/PKG-INFO
+final_model.egg-info/SOURCES.txt
+final_model.egg-info/dependency_links.txt
+final_model.egg-info/requires.txt
+final_model.egg-info/top_level.txt
+pointnet/__init__.py
+pointnet/model.py
+utils/__init__.py
+utils/helpers.py
+utils/train_classification.py
