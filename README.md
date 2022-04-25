@@ -8,7 +8,7 @@ Next, clone this repo in the root folder.
 
 ```
 cd <root folder>
-git clone https://github.com/fxia22/pointnet.pytorch
+git clone https://github.com/andrewyarovoi/final_model.git
 cd final_model
 pip install -e .
 ```
