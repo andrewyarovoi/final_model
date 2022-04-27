@@ -7,6 +7,7 @@ import torch.nn.parallel
 import torch.optim as optim
 import torch.utils.data
 from pointnet.model import PointNetCls, feature_transform_regularizer
+from residual_transformer.model import ResidualTransformer
 from dataset.dynamic_dataset import DynamicModelNetDataset
 from dataset.static_dataset import StaticModelNetDataset
 import torch.nn.functional as F
@@ -99,8 +100,9 @@ def train():
         os.makedirs(opt.outf)
     except OSError:
         pass
-
-    classifier = PointNetCls(k=num_classes, feature_transform=opt.feature_transform)
+    
+    classifier = ResidualTransformer(k=num_classes)
+    # classifier = PointNetCls(k=num_classes, feature_transform=opt.feature_transform)
 
     if opt.model != '':
         classifier.load_state_dict(torch.load(opt.model))

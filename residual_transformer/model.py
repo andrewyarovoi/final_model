@@ -21,109 +21,77 @@
 # }
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from point_transformer_modules import PointTransformerBlock, TransitionDown
-
-
-class ResidualPoint(nn.Module):
-    def __init__(self, dim):
-        self.mlp = nn.Conv1d(dim, dim, 1)
-        self.bn = nn.BatchNorm1d(dim)
-        self.relu = nn.ReLU()
-
-    def forward(self, x):
-        out = self.mlp(x)
-        out = self.bn(out)
-        out = self.relu(out)
-        out = self.mlp(out)
-        out = self.bn(out)
-        out = x + out
-        out = self.relu(out)
-        return out
+from utility_modules import MLP, ResidualPointBlock
 
 class ResidualTransformer(nn.Module):
-    def __init__(self):
+    def __init__(self, k=40):
         super().__init__()
 
-        self.first_mlp = nn.Sequential(
-            nn.Conv1d(3, 32),
-            nn.BatchNorm1d(32),
-            nn.ReLU(),
-            nn.Conv1d(32, 32),
-            nn.BatchNorm1d(32),
-            nn.ReLU()
-        )
-
-        self.lin32 = nn.Sequential(
-            nn.Linear(32, 32),
-            nn.ReLU()
-        )
-
-        self.lin64 = nn.Sequential(
-            nn.Linear(64, 64),
-            nn.ReLU()
-        )
-
-        self.lin128 = nn.Sequential(
-            nn.Linear(128, 128),
-            nn.ReLU()
-        )
-
+        self.first_mlp = MLP(3, 32)
         self.transformer1 = PointTransformerBlock(32)
+        self.lin32 = nn.Linear(32, 32)
+        self.trans_down1 = TransitionDown(32, 64, stride=8)
+        self.lin64 = nn.Linear(64, 64)
         self.transformer2 = PointTransformerBlock(64)
-        self.transformer3 = PointTransformerBlock(128)
-
-        self.transitionDown1 = TransitionDown(32, 64)
-        self.transitionDown2 = TransitionDown(64, 128)
-
-        self.max_pool = nn.MaxPool2d((1, 8), stride=8)
-
-        self.residual = ResidualPoint(128)
-
+        self.resp1_1 = ResidualPointBlock(64)
+        self.resp1_2 = ResidualPointBlock(64)
+        self.trans_down2 = TransitionDown(64, 128, stride=8)
+        self.resp2_1 = ResidualPointBlock(128)
+        self.resp2_2 = ResidualPointBlock(128)
         self.final_mlp = nn.Sequential(
-            nn.Conv1d(128, 128),
-            nn.BatchNorm1d(128),
-            nn.ReLU(),
-            nn.Conv1d(128, 40),
-            nn.BatchNorm1d(40),
-            nn.ReLU()
+            nn.Linear(128, 64),
+            nn.BatchNorm1d(64),
+            nn.ReLU(inplace=True),
+            nn.Linear(64, 64),
+            nn.Dropout(p=0.3),
+            nn.BatchNorm1d(64),
+            nn.ReLU(inplace=True),
+            nn.Linear(64, k)
         )
     
-    def forward(self, x):
+    def forward(self, p):
         """
-        N = 1024
-        D = 3
-        x: (N, D)
+        p = [B, D, N]
+        B = Batch Size (16)
+        N = Num Points (1024)
+        D = Feature Length (3)
         """
-        out = self.first_mlp(x)                     # (1042,   3,  32)
+        # converts points to features using MLP
+        x = self.first_mlp(p)                       # (1042,   3,  32)
 
-        """??? unsure how to get in_features as input for transformer1 ???"""
-        out = self.lin32(out)                       # (1024,  32,  32)
-        out = self.transformer1((x,out))            # (1024,  32,  32) 
+        # apply transformer (doesn't change output size)
+        p, x = self.transformer1((p,x))             # (1024,  32,  32) 
+        x = self.lin32(x)                           # (1024,  32,  32)
 
-        out = self.lin32(out)                       # (1024,  32,  32)
-        out = self.transitionDown1(out)             # ( 256,  32,  64) -- N/=4
+        # apply transform down block (reduces N -> N/8 and increases D)
+        p, x = self.trans_down1((p,x))              # ( 128,  32,  64)
+        x = self.lin64(x)                           # ( 128,  64,  64)
+        
+        # apply transformer (doesn't change output size)
+        p, x = self.transformer2((p,x))             # ( 128,  64,  64) 
 
-        out = self.lin64(out)                       # ( 256,  64,  64)
-        _, out = self.transformer2(out)             # ( 256,  64,  64)
+        # apply resblocks
+        x = self.resp1_1(x)                         # ( 128,  64,  64) 
+        x = self.resp1_2(x)                         # ( 128,  64,  64) 
 
-        out = self.lin64(out)                       # ( 256,  64,  64)
-        out = self.transitionDown2(out)             # (  64,  64, 128) -- N/=4
+        # apply transform down block (reduces N -> N/8 and increases D)
+        p, x = self.trans_down2((p,x))              # ( 16,  64,  128)
 
-        out = self.lin128(out)                      # (  64, 128, 128)
-        out = self.transformer3(out)                # (  64, 128, 128)
+        # apply resblocks
+        x = self.resp2_1(x)                         # ( 16,  128,  128)
+        x = self.resp2_2(x)                         # ( 16,  128,  128)
 
-        out = self.residual(out)                    # (  64, 128, 128)
-        out = self.max_pool(out)                    # (   8, 128, 128) -- N/=8
+        x = torch.max(x, 2, keepdim=True)[0]        # (   1, 128,  128)
+        x = x.view(-1, 128)
 
-        out = self.residual(out)                    # (   8, 128, 128)
-        out = self.max_pool(out)                    # (   1, 128, 128) -- N/=8
+        out = self.final_mlp(x)                     # out = [N, 40]
 
-        out = self.final_mlp(out)                   # (   1, 128,  40)
-
-        return out
+        return F.log_softmax(out, dim=1)
 
 if __name__=="main":
-    data = torch.rand(2, 3, 2048)
+    data = torch.rand(2, 3, 1024)
     model = ResidualTransformer()
 
     out = model.forward(data)
