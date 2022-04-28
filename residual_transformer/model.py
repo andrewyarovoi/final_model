@@ -22,8 +22,8 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from point_transformer_modules import PointTransformerBlock, TransitionDown
-from utility_modules import MLP, ResidualPointBlock
+from residual_transformer.point_transformer_modules import PointTransformerBlock, TransitionDown
+from residual_transformer.utility_modules import MLP, ResidualPointBlock
 
 class ResidualTransformer(nn.Module):
     def __init__(self, k=40):
@@ -31,9 +31,9 @@ class ResidualTransformer(nn.Module):
 
         self.first_mlp = MLP(3, 32)
         self.transformer1 = PointTransformerBlock(32)
-        self.lin32 = nn.Linear(32, 32)
+        self.lin32 = nn.Conv1d(32, 32, 1)
         self.trans_down1 = TransitionDown(32, 64, stride=8)
-        self.lin64 = nn.Linear(64, 64)
+        self.lin64 = nn.Conv1d(64, 64, 1)
         self.transformer2 = PointTransformerBlock(64)
         self.resp1_1 = ResidualPointBlock(64)
         self.resp1_2 = ResidualPointBlock(64)
@@ -42,10 +42,11 @@ class ResidualTransformer(nn.Module):
         self.resp2_2 = ResidualPointBlock(128)
         self.final_mlp = nn.Sequential(
             nn.Linear(128, 64),
+            nn.Dropout(p=0.2),
             nn.BatchNorm1d(64),
             nn.ReLU(inplace=True),
             nn.Linear(64, 64),
-            nn.Dropout(p=0.3),
+            nn.Dropout(p=0.2),
             nn.BatchNorm1d(64),
             nn.ReLU(inplace=True),
             nn.Linear(64, k)
@@ -60,6 +61,8 @@ class ResidualTransformer(nn.Module):
         """
         # converts points to features using MLP
         x = self.first_mlp(p)                       # (1042,   3,  32)
+        
+        p = p.float().transpose(2, 1).contiguous()
 
         # apply transformer (doesn't change output size)
         p, x = self.transformer1((p,x))             # (1024,  32,  32) 

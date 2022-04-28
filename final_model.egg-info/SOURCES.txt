@@ -16,6 +16,13 @@ lib/pointops/setup.py
 lib/pointops/functions/__init__.py
 lib/pointops/functions/pointops.py
 lib/pointops/src/__init__.py
+lib/pointops/src/knnquery/__init__.py
+lib/pointops/src/knnquery_heap/__init__.py
+lib/sync_bn/__init__.py
+lib/sync_bn/batchnorm.py
+lib/sync_bn/comm.py
+lib/sync_bn/replicate.py
+lib/sync_bn/unittest.py
 pointnet/__init__.py
 pointnet/model.py
 residual_transformer/__init__.py
