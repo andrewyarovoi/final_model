@@ -91,8 +91,9 @@ class ResidualTransformer(nn.Module):
         return F.log_softmax(out, dim=1)
 
 if __name__ == '__main__':
-    data = torch.rand(2, 3, 1024)
-    model = ResidualTransformer()
+    device = torch.device('cuda')
+    data = torch.rand(2, 3, 1024).to(device)
+    model = ResidualTransformer().to(device)
 
     out = model.forward(data)
     print(out.shape)

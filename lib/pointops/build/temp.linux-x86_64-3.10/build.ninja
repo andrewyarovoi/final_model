@@ -20,19 +20,25 @@ rule cuda_compile
 
 
 
-build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/aggregation/aggregation_cuda.o: compile /home/andrew/Desktop/final_model/lib/pointops/src/aggregation/aggregation_cuda.cpp
-build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/aggregation/aggregation_cuda_kernel.o: cuda_compile /home/andrew/Desktop/final_model/lib/pointops/src/aggregation/aggregation_cuda_kernel.cu
+build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/ballquery/ballquery_cuda.o: compile /home/andrew/Desktop/final_model/lib/pointops/src/ballquery/ballquery_cuda.cpp
+build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/ballquery/ballquery_cuda_kernel.o: cuda_compile /home/andrew/Desktop/final_model/lib/pointops/src/ballquery/ballquery_cuda_kernel.cu
+build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/featuredistribute/featuredistribute_cuda.o: compile /home/andrew/Desktop/final_model/lib/pointops/src/featuredistribute/featuredistribute_cuda.cpp
+build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/featuredistribute/featuredistribute_cuda_kernel.o: cuda_compile /home/andrew/Desktop/final_model/lib/pointops/src/featuredistribute/featuredistribute_cuda_kernel.cu
 build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/grouping/grouping_cuda.o: compile /home/andrew/Desktop/final_model/lib/pointops/src/grouping/grouping_cuda.cpp
 build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/grouping/grouping_cuda_kernel.o: cuda_compile /home/andrew/Desktop/final_model/lib/pointops/src/grouping/grouping_cuda_kernel.cu
+build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/grouping_int/grouping_int_cuda.o: compile /home/andrew/Desktop/final_model/lib/pointops/src/grouping_int/grouping_int_cuda.cpp
+build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/grouping_int/grouping_int_cuda_kernel.o: cuda_compile /home/andrew/Desktop/final_model/lib/pointops/src/grouping_int/grouping_int_cuda_kernel.cu
 build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/interpolation/interpolation_cuda.o: compile /home/andrew/Desktop/final_model/lib/pointops/src/interpolation/interpolation_cuda.cpp
 build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/interpolation/interpolation_cuda_kernel.o: cuda_compile /home/andrew/Desktop/final_model/lib/pointops/src/interpolation/interpolation_cuda_kernel.cu
 build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/knnquery/knnquery_cuda.o: compile /home/andrew/Desktop/final_model/lib/pointops/src/knnquery/knnquery_cuda.cpp
 build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/knnquery/knnquery_cuda_kernel.o: cuda_compile /home/andrew/Desktop/final_model/lib/pointops/src/knnquery/knnquery_cuda_kernel.cu
+build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/knnquery_heap/knnquery_heap_cuda.o: compile /home/andrew/Desktop/final_model/lib/pointops/src/knnquery_heap/knnquery_heap_cuda.cpp
+build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/knnquery_heap/knnquery_heap_cuda_kernel.o: cuda_compile /home/andrew/Desktop/final_model/lib/pointops/src/knnquery_heap/knnquery_heap_cuda_kernel.cu
+build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/labelstat/labelstat_cuda.o: compile /home/andrew/Desktop/final_model/lib/pointops/src/labelstat/labelstat_cuda.cpp
+build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/labelstat/labelstat_cuda_kernel.o: cuda_compile /home/andrew/Desktop/final_model/lib/pointops/src/labelstat/labelstat_cuda_kernel.cu
 build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/pointops_api.o: compile /home/andrew/Desktop/final_model/lib/pointops/src/pointops_api.cpp
 build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/sampling/sampling_cuda.o: compile /home/andrew/Desktop/final_model/lib/pointops/src/sampling/sampling_cuda.cpp
 build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/sampling/sampling_cuda_kernel.o: cuda_compile /home/andrew/Desktop/final_model/lib/pointops/src/sampling/sampling_cuda_kernel.cu
-build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/subtraction/subtraction_cuda.o: compile /home/andrew/Desktop/final_model/lib/pointops/src/subtraction/subtraction_cuda.cpp
-build /home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/subtraction/subtraction_cuda_kernel.o: cuda_compile /home/andrew/Desktop/final_model/lib/pointops/src/subtraction/subtraction_cuda_kernel.cu
 
 
 
