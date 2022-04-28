@@ -90,7 +90,7 @@ class ResidualTransformer(nn.Module):
 
         return F.log_softmax(out, dim=1)
 
-if __name__=="main":
+if __name__ == '__main__':
     data = torch.rand(2, 3, 1024)
     model = ResidualTransformer()
 

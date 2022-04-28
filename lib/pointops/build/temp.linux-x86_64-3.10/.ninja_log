@@ -1,0 +1,14 @@
+# ninja log v5
+3	23595	1651115002115289663	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/pointops_api.o	c874844f07de2322
+1	24846	1651115003379307872	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/grouping/grouping_cuda_kernel.o	8e7fa71215f638fc
+4	25546	1651115004079317957	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/sampling/sampling_cuda_kernel.o	a5efbe52372c5c3c
+2	26172	1651115004707327006	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/interpolation/interpolation_cuda_kernel.o	4109da34844a2b86
+1	26716	1651115005251334844	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/aggregation/aggregation_cuda_kernel.o	8aec49aa510f5ab6
+3	26796	1651115005331335997	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/knnquery/knnquery_cuda_kernel.o	f9828f3e56de1ac2
+6	27196	1651115005731341761	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/subtraction/subtraction_cuda_kernel.o	d545337d03148332
+9	7643	1651115297391601521	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/aggregation/aggregation_cuda.o	356e8b842c0a9a9d
+9	7978	1651115297727606483	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/interpolation/interpolation_cuda.o	d02886a76d4df01e
+9	8046	1651115297803607605	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/knnquery/knnquery_cuda.o	664fc552da53ee30
+9	8117	1651115297871608609	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/grouping/grouping_cuda.o	a7d5ce3ffaace5e2
+10	8165	1651115297919609318	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/sampling/sampling_cuda.o	dc382e3dbd6248
+10	8422	1651115298175613099	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/subtraction/subtraction_cuda.o	b72ed166135414c3
