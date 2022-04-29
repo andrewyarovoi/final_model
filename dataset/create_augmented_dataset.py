@@ -56,6 +56,9 @@ def create_augmented_dataset(input_path, output_path, num_points=1024, num_augme
                 labels[idx] = classes[category]
                 pointclouds[idx, :, :] = helpers.extract_pointcloud(cat_dir, file, helpers.augment_transforms(num_points))
                 
+                if (idx==0):
+                    np.savetxt("point_example.csv", helpers.extract_pointcloud(cat_dir, file, helpers.augment_transforms(num_points)), delimiter=",")
+
                 idx += 1
                 # used for terminal output to show progress
                 if (idx > update_idx):

@@ -112,7 +112,7 @@ def train():
         classifier.load_state_dict(torch.load(opt.model))
 
     optimizer = optim.Adam(classifier.parameters(), lr=0.001, betas=(0.9, 0.999))
-    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=6, gamma=0.5)
+    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=int(opt.nepoch/3), gamma=0.5)
     
     classifier.to(device)
 
@@ -120,11 +120,6 @@ def train():
 
     train_accuracies = torch.zeros(opt.nepoch, 2) #tensor to store total and average accuracy per epoch
     test_accuracies = torch.zeros(opt.nepoch, 2)
-    test_loss = []
-    test_acc = []
-    train_loss = []
-    train_acc = []
-    ep = []
 
     for epoch in range(opt.nepoch):
         train_class_accuracy = torch.zeros(num_classes, 2) #tensor to store percent of correct predictions and avg percent of predictions per class
@@ -189,11 +184,11 @@ def train():
         points, target = data
         points = points.float().transpose(2, 1)
         points, target = points.cuda(), target.cuda()
+        classifier = classifier.eval()
         if (opt.model_type == "residual_transformer"):
-            classifier = classifier.eval()
+            pred = classifier(points)
         else:
             pred, _, _ = classifier(points)
-        pred = classifier(points)
         pred_choice = pred.data.max(1)[1]
         correct = pred_choice.eq(target.data).cpu().sum()
         total_correct += correct.item()

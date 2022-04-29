@@ -26,7 +26,7 @@ from residual_transformer.point_transformer_modules import PointTransformerBlock
 from residual_transformer.utility_modules import MLP, ResidualPointBlock
 
 class ResidualTransformer(nn.Module):
-    def __init__(self, k=40):
+    def __init__(self, k=40, p1 = 0, p2 = 0.3):
         super().__init__()
 
         self.first_mlp = MLP(3, 32)
@@ -42,11 +42,11 @@ class ResidualTransformer(nn.Module):
         self.resp2_2 = ResidualPointBlock(128)
         self.final_mlp = nn.Sequential(
             nn.Linear(128, 64),
-            nn.Dropout(p=0.2),
+            nn.Dropout(p=p1),
             nn.BatchNorm1d(64),
             nn.ReLU(inplace=True),
             nn.Linear(64, 64),
-            nn.Dropout(p=0.2),
+            nn.Dropout(p=p2),
             nn.BatchNorm1d(64),
             nn.ReLU(inplace=True),
             nn.Linear(64, k)
