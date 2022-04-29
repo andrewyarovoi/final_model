@@ -132,11 +132,11 @@ def train():
             points = points.float().transpose(2, 1)
             points, target = points.to(device), target.to(device)
             optimizer.zero_grad()
+            classifier = classifier.train()
             if (opt.model_type == "residual_transformer"):
-                classifier = classifier.train()
+                pred = classifier(points)
             else:
                 pred, trans, trans_feat = classifier(points)
-            pred = classifier(points)
             loss = F.nll_loss(pred, target)
             if opt.model_type == "pointnet" and opt.feature_transform:
                 loss += feature_transform_regularizer(trans_feat) * 0.001
@@ -156,8 +156,10 @@ def train():
                 points = points.float().transpose(2, 1)
                 points, target = points.cuda(), target.cuda()
                 classifier = classifier.eval()
-                # pred, _, _ = classifier(points)
-                pred = classifier(points)
+                if (opt.model_type == "residual_transformer"):
+                    pred = classifier(points)
+                else:
+                    pred, trans, trans_feat = classifier(points)
                 loss = F.nll_loss(pred, target)
                 pred_choice = pred.data.max(1)[1]
                 correct = pred_choice.eq(target.data).cpu()
