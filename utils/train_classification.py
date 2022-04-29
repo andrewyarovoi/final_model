@@ -30,6 +30,9 @@ def train():
     parser.add_argument('--static_dataset', action='store_true', help='use static point sampling for each epoch')
     parser.add_argument('--feature_transform', action='store_true', help="use feature transform")
     parser.add_argument('--model_type', type=str, default='residual_transformer', help="which model to run <residual_transformer> or <pointnet>")
+    parser.add_argument('--p1', type=float, default=0.0, help='dropout probability for 3rd to final layer')
+    parser.add_argument('--p2', type=float, default=0.3, help='dropout probability for 2nd to final layer')
+    parser.add_argument('--lr_step_size', type=int, default=10, help='every lr_step_size epochs, the learning rate is halved')
 
     opt = parser.parse_args()
     print(opt)
@@ -104,7 +107,7 @@ def train():
         pass
     
     if (opt.model_type == "residual_transformer"):
-        classifier = ResidualTransformer(k=num_classes)
+        classifier = ResidualTransformer(k=num_classes, p1=opt.p1, p2=opt.p2)
     else:
         classifier = PointNetCls(k=num_classes, feature_transform=opt.feature_transform)
 
@@ -112,7 +115,7 @@ def train():
         classifier.load_state_dict(torch.load(opt.model))
 
     optimizer = optim.Adam(classifier.parameters(), lr=0.001, betas=(0.9, 0.999))
-    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=int(opt.nepoch/3), gamma=0.5)
+    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=opt.lr_step_size, gamma=0.5)
     
     classifier.to(device)
 
