@@ -28,6 +28,7 @@ def train():
     parser.add_argument('--dataset', type=str, default='..\..\data\ModelNet40_numpy\\', help="dataset path")
     parser.add_argument('--static_dataset', action='store_true', help='use static point sampling for each epoch')
     parser.add_argument('--feature_transform', action='store_true', help="use feature transform")
+    parser.add_argument('--model_type', type=str, default='residual_transformer', help="which model to run <residual_transformer> or <pointnet>")
 
     opt = parser.parse_args()
     print(opt)
@@ -101,8 +102,10 @@ def train():
     except OSError:
         pass
     
-    classifier = ResidualTransformer(k=num_classes)
-    # classifier = PointNetCls(k=num_classes, feature_transform=opt.feature_transform)
+    if (opt.model_type == "residual_transformer"):
+        classifier = ResidualTransformer(k=num_classes)
+    else:
+        classifier = PointNetCls(k=num_classes, feature_transform=opt.feature_transform)
 
     if opt.model != '':
         classifier.load_state_dict(torch.load(opt.model))
@@ -114,18 +117,26 @@ def train():
 
     num_batch = len(dataset) / opt.batchSize
 
+    test_loss = []
+    test_acc = []
+    train_loss = []
+    train_acc = []
+    ep = []
+
     for epoch in range(opt.nepoch):
         for i, data in enumerate(dataloader, 0):
             points, target = data
             points = points.float().transpose(2, 1)
             points, target = points.to(device), target.to(device)
             optimizer.zero_grad()
-            classifier = classifier.train()
-            # pred, trans, trans_feat = classifier(points)
+            if (opt.model_type == "residual_transformer"):
+                classifier = classifier.train()
+            else:
+                pred, trans, trans_feat = classifier(points)
             pred = classifier(points)
             loss = F.nll_loss(pred, target)
-            # if opt.feature_transform:
-            #     loss += feature_transform_regularizer(trans_feat) * 0.001
+            if opt.model_type == "pointnet" and opt.feature_transform:
+                loss += feature_transform_regularizer(trans_feat) * 0.001
             loss.backward()
             optimizer.step()
             pred_choice = pred.data.max(1)[1]
@@ -155,8 +166,10 @@ def train():
         points, target = data
         points = points.float().transpose(2, 1)
         points, target = points.cuda(), target.cuda()
-        classifier = classifier.eval()
-        # pred, _, _ = classifier(points)
+        if (opt.model_type == "residual_transformer"):
+            classifier = classifier.eval()
+        else:
+            pred, _, _ = classifier(points)
         pred = classifier(points)
         pred_choice = pred.data.max(1)[1]
         correct = pred_choice.eq(target.data).cpu().sum()
