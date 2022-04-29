@@ -12,6 +12,7 @@ from dataset.dynamic_dataset import DynamicModelNetDataset
 from dataset.static_dataset import StaticModelNetDataset
 import torch.nn.functional as F
 from tqdm import tqdm
+import matplotlib.pyplot as plt
 
 def train():
     parser = argparse.ArgumentParser()
@@ -114,7 +115,12 @@ def train():
 
     num_batch = len(dataset) / opt.batchSize
 
+    train_accuracies = torch.zeros(opt.nepoch, 2) #tensor to store total and average accuracy per epoch
+    test_accuracies = torch.zeros(opt.nepoch, 2)
+
     for epoch in range(opt.nepoch):
+        train_class_accuracy = torch.zeros(num_classes, 2) #tensor to store percent of correct predictions and avg percent of predictions per class
+        test_class_accuracy = torch.zeros(num_classes, 2)
         for i, data in enumerate(dataloader, 0):
             points, target = data
             points = points.float().transpose(2, 1)
@@ -128,8 +134,12 @@ def train():
             loss.backward()
             optimizer.step()
             pred_choice = pred.data.max(1)[1]
-            correct = pred_choice.eq(target.data).cpu().sum()
-            print('[%d: %d/%d] train loss: %f accuracy: %f' % (epoch, i, num_batch, loss.item(), correct.item() / float(opt.batchSize)))
+            correct = pred_choice.eq(target.data).cpu()
+            for j in range(target.shape[0]):
+                train_class_accuracy[target[j], 1] += 1
+                if correct[j]:
+                    train_class_accuracy[target[j], 0] += 1
+            print('[%d: %d/%d] train loss: %f accuracy: %f' % (epoch, i, num_batch, loss.item(), correct.sum().item() / float(opt.batchSize)))
 
             if i % 10 == 0:
                 j, data = next(enumerate(testdataloader, 0))
@@ -140,9 +150,23 @@ def train():
                 pred, _, _ = classifier(points)
                 loss = F.nll_loss(pred, target)
                 pred_choice = pred.data.max(1)[1]
-                correct = pred_choice.eq(target.data).cpu().sum()
-                print('[%d: %d/%d] %s loss: %f accuracy: %f' % (epoch, i, num_batch, blue('test'), loss.item(), correct.item()/float(opt.batchSize)))
-        
+                correct = pred_choice.eq(target.data).cpu()
+                for j in range(target.shape[0]):
+                    test_class_accuracy[target[j], 1] += 1
+                    if correct[j]:
+                        test_class_accuracy[target[j], 0] += 1
+                print('[%d: %d/%d] %s loss: %f accuracy: %f' % (epoch, i, num_batch, blue('test'), loss.item(), correct.sum().item()/float(opt.batchSize)))
+        train_avg_accuracy = 0
+        test_avg_accuracy = 0
+        for j in range(num_classes):
+            train_avg_accuracy += (train_class_accuracy[j,0]/train_class_accuracy[j,1])/num_classes
+            test_avg_accuracy += (test_class_accuracy[j,0]/test_class_accuracy[j,1])/num_classes
+        train_acc_sum = train_class_accuracy.sum(0)
+        test_acc_sum = test_class_accuracy.sum(0)
+        train_accuracies[epoch, 0] = train_acc_sum[0]/train_acc_sum[1]
+        train_accuracies[epoch, 1] = train_avg_accuracy
+        test_accuracies[epoch, 0] = test_acc_sum[0]/test_acc_sum[1]
+        test_accuracies[epoch, 1] = test_avg_accuracy
         scheduler.step()
 
         torch.save(classifier.state_dict(), '%s/cls_model_%d.pth' % (opt.outf, epoch))
@@ -161,6 +185,15 @@ def train():
         total_testset += points.size()[0]
 
     print("final accuracy {}".format(total_correct / float(total_testset)))
+    print(train_accuracies)
+    print(test_accuracies)
+    torch.save(train_accuracies, 'ptrnet_train_acc.pt')
+    torch.save(test_accuracies, 'ptrnet_test_acc.pt')
+    train_acc = train_accuracies.numpy().T
+    test_acc = test_accuracies.numpy().T
+    plt.plot(train_acc[0])
+    plt.plot(test_acc[0])
+    plt.show()
 
 if __name__ == '__main__':
     train()
