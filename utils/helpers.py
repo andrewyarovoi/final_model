@@ -14,6 +14,14 @@ def default_transforms(npoints):
                                 ToTensor()
                               ])
 
+def volatile_transforms(npoints):
+    return transforms.Compose([
+                                PointSampler(npoints),
+                                RandRotation_z(),
+                                Normalize(),
+                                RandomNoise()
+                              ])
+
 def static_transforms(npoints):
     return transforms.Compose([
                                 PointSampler(npoints),
