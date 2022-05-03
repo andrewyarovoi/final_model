@@ -67,5 +67,5 @@ def create_static_dataset(input_path, output_path, num_points=1024, sub_f="train
     np.save(root_out_dir/"labels", labels)
 
 if __name__ == '__main__':
-    create_static_dataset("..\..\data/ModelNet40_numpy\\", "..\..\data\ModelNet40_sampled\\", sub_f="test")
-    create_static_dataset("..\..\data/ModelNet40_numpy\\", "..\..\data\ModelNet40_sampled\\", sub_f="train")
+    create_static_dataset("../../data/ModelNet40_numpy/", "../../data/ModelNet40_sampled/", sub_f="test")
+    create_static_dataset("../../data/ModelNet40_numpy/", "../../data/ModelNet40_sampled/", sub_f="train")

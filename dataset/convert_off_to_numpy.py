@@ -88,4 +88,4 @@ def convert_dataset(input_path, output_path):
 
 
 if __name__ == '__main__':
-    convert_dataset("..\..\data/ModelNet40\\", "..\..\data\ModelNet40_numpy\\")
+    convert_dataset("../../data/ModelNet40/", "../../data/ModelNet40_numpy/")

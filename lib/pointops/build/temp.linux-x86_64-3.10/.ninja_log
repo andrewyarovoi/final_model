@@ -1,0 +1,20 @@
+# ninja log v5
+2	25006	1651117588511114192	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/grouping/grouping_cuda_kernel.o	8e7fa71215f638fc
+5	25639	1651117589147124253	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/knnquery_heap/knnquery_heap_cuda_kernel.o	fbe89db2b3414656
+3	26366	1651117589871135705	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/knnquery/knnquery_cuda_kernel.o	f9828f3e56de1ac2
+2	27012	1651117590519145954	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/grouping_int/grouping_int_cuda_kernel.o	75bbf9dc804f8eda
+0	27096	1651117590603147283	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/ballquery/ballquery_cuda_kernel.o	d18383da4d4eb5ad
+1	27264	1651117590771149940	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/featuredistribute/featuredistribute_cuda_kernel.o	b25296caf5526215
+3	28258	1651117591759165567	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/interpolation/interpolation_cuda_kernel.o	4109da34844a2b86
+3	22519	1651117650400091816	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/pointops_api.o	c874844f07de2322
+3	25083	1651117652976132452	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/labelstat/labelstat_cuda_kernel.o	bdd3a1c459824446
+4	26091	1651117653980148288	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/sampling/sampling_cuda_kernel.o	a5efbe52372c5c3c
+6	8655	1651117676868509142	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/featuredistribute/featuredistribute_cuda.o	6f36c2112fa23407
+7	9119	1651117677328516391	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/interpolation/interpolation_cuda.o	d02886a76d4df01e
+7	9295	1651117677500519102	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/knnquery_heap/knnquery_heap_cuda.o	f7ca814b1707475b
+7	10169	1651117678380532969	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/grouping/grouping_cuda.o	a7d5ce3ffaace5e2
+7	10241	1651117678448534041	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/grouping_int/grouping_int_cuda.o	c6c9233c891f3f1d
+7	10384	1651117678592536310	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/knnquery/knnquery_cuda.o	664fc552da53ee30
+7	10484	1651117678696537948	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/sampling/sampling_cuda.o	dc382e3dbd6248
+6	10645	1651117678856540470	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/ballquery/ballquery_cuda.o	372e78d9abc44e23
+7	11095	1651117679300547466	/home/andrew/Desktop/final_model/lib/pointops/build/temp.linux-x86_64-3.10/src/labelstat/labelstat_cuda.o	dc68986ec5c585cc

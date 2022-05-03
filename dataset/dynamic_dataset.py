@@ -14,6 +14,7 @@ class DynamicModelNetDataset(data.Dataset):
         folders = [dir for dir in sorted(os.listdir(self.root_dir)) if os.path.isdir(self.root_dir/dir)]
         self.classes = {folder: i for i, folder in enumerate(folders)}
         self.transforms = transform if transform else helpers.default_transforms(npoints)
+        print(self.transforms)
         self.files = []
         for category in self.classes.keys():
             new_dir = self.root_dir/Path(category)/folder

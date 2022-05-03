@@ -50,6 +50,12 @@ cd utils
 python train_classification.py --nepoch=30 --dataset ..\..\data\ModelNet40_numpy
 ```
 
+# Running Residual Transformer with static augmented dataset
+```
+cd utils
+python train_classification.py --static_dataset --nepoch=20 --dataset ../../data/ModelNet40_aug --p1 0.2 --p2 0.2 --lr_step_size 5
+```
+
 # Performance
 
 Both methods give about 88% accuracy on the test set.
