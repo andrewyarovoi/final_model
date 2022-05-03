@@ -14,6 +14,15 @@ def default_transforms(npoints):
                                 ToTensor()
                               ])
 
+def dynamic_transforms(npoints):
+    return transforms.Compose([
+                                PointSampler(npoints),
+                                RandRotation_z(),
+                                Normalize(),
+                                RandomNoise(),
+                                ToTensor()
+                              ])
+
 def augment_transforms(npoints):
     return transforms.Compose([
                                 PointSampler(npoints),

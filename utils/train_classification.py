@@ -12,6 +12,7 @@ from dataset.dynamic_dataset import DynamicModelNetDataset
 from dataset.static_dataset import StaticModelNetDataset
 import torch.nn.functional as F
 from tqdm import tqdm
+from utils import helpers
 import matplotlib.pyplot as plt
 
 def train():
@@ -76,7 +77,8 @@ def train():
         dataset = DynamicModelNetDataset(
             root_dir=opt.dataset,
             npoints=opt.num_points,
-            folder='train')
+            folder='train',
+            transform=helpers.dynamic_transforms(opt.num_points))
 
         test_dataset = DynamicModelNetDataset(
             root_dir=opt.dataset,
